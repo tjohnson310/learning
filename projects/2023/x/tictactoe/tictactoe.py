@@ -22,21 +22,51 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
+    num_x = 0
+    num_o = 0
+    for row in board:
+        for row_item in row:
+            if row_item == X:
+                num_x += 1
+            elif row_item == O:
+                num_o += 1
+
+    if num_o >= num_x:
+        return X
+    else:
+        return O
 
 
 def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    all_actions = set()
+    for i, row in enumerate(board):
+        for j, row_item in enumerate(row):
+            if row_item == EMPTY:
+                all_actions.add((i, j))
+
+    return all_actions
 
 
-def result(board, action):
+def result(board, action: tuple):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    board_new = board
+    player_who = player(board)
+    row = action[0]
+    col = action[1]
+
+    try:
+        if board[row][col] == EMPTY:
+            board_new[row][col] = player_who
+            return board_new
+        else:
+            raise Exception('Player may not make a move in this square...')
+    except IndexError:
+        raise Exception('Player may not make a move in this square...')
 
 
 def winner(board):
@@ -65,3 +95,13 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     raise NotImplementedError
+
+
+if __name__ == "__main__":
+    initial = initial_state()
+    next_player = player(initial)
+    all_available_actions = actions(initial)
+
+    new_action = (2, 1)
+    new_board = result(initial, new_action)
+    print(new_board)

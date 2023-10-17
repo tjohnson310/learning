@@ -119,14 +119,32 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    player_up = player(board)
-    if player_up == X:
-        max_game = True
-    elif player_up == O:
-        max_game = False
-
+    whose_move = player(board)
     test_board = copy.deepcopy(board)
-    if terminal(test_board) and winner(test_board) == player_up
+
+    def max_value(state, actions_values: list = None):
+        if terminal(state):
+            return utility(state)
+        v = -math.inf
+        for action in actions(state):
+            actions_values.append((action, max_value(result(state, action), actions_values)))
+            v = max(v, min_value(result(state, action)))
+        return v
+
+    def min_value(state, actions_values: tuple = None):
+        if terminal(state):
+            return utility(state)
+        v = math.inf
+        for action in actions(state):
+            v = min(v, max_value(result(state, action)))
+        return v
+
+    if whose_move == X:
+        max_player = True
+    elif whose_move == O:
+        max_player = False
+    else:
+        raise Exception("Invalid player option...")
 
 
 if __name__ == "__main__":

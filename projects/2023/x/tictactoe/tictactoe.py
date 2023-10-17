@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -54,7 +55,7 @@ def result(board, action: tuple):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    board_new = board
+    board_new = copy.deepcopy(board)
     player_who = player(board)
     row = action[0]
     col = action[1]
@@ -73,28 +74,59 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+    for row in board:
+        if row[0] == row[1] == row[2]:
+            return row[0]
+
+    left_diag = board[0][0] == board[1][1] == board[2][2]
+    right_diag = board[0][2] == board[1][1] == board[2][0]
+
+    if left_diag:
+        return board[0][0]
+    elif right_diag:
+        return board[0][2]
+    else:
+        return None
 
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    if winner(board) is not None:
+        return True
+
+    if EMPTY not in [item for sublist in board for item in sublist]:
+        return True
+    else:
+        return False
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    who_won = winner(board)
+    if who_won == X:
+        return 1
+    elif who_won == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    player_up = player(board)
+    if player_up == X:
+        max_game = True
+    elif player_up == O:
+        max_game = False
+
+    test_board = copy.deepcopy(board)
+    if terminal(test_board) and winner(test_board) == player_up
 
 
 if __name__ == "__main__":

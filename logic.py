@@ -230,6 +230,7 @@ def model_check(knowledge, query):
 
     def check_all(knowledge, query, symbols, model):
         """Checks if knowledge base entails query, given a particular model."""
+        # print(f"Model: {model}")
 
         # If model has an assignment for each symbol
         if not symbols:

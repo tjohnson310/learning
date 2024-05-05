@@ -57,6 +57,6 @@ void print_right_side(int e, int f){
         print_blocks(f-1);
     }else if (e < f){
         print_blocks(e-1);
-        print_spaces(f-e);
+        // print_spaces(f-e);
     }
 }

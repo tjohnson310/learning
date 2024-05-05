@@ -55,8 +55,6 @@ void print_left_side(int c, int d){
 void print_right_side(int e, int f){
     if (e == f){
         print_blocks(f-1);
-    }else if (e == 1){
-        print_spaces(f-1);
     }else if (e < f){
         print_blocks(e-1);
         print_spaces(f-e);

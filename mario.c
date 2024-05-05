@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cs50.h>
 
 void print_blocks(int a);
 void print_spaces(int b);

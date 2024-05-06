@@ -43,13 +43,13 @@ int main(void)
     sum = evens + odds;
     if (sum % 10 == 0)
     {
-        if (mod_cc_number == 3)
+        if (mod_cc_number == 3 && counter == 17)
         {
-            printf("AMERICAN EXPRESS\n");
-        } else if (mod_cc_number == 4)
+            printf("AMEX\n");
+        } else if (mod_cc_number == 4 && (counter == 14 || counter == 17))
         {
             printf("VISA\n");
-        } else if (mod_cc_number == 5)
+        } else if (mod_cc_number == 5 && counter == 17)
         {
             printf("MASTERCARD\n");
         } else

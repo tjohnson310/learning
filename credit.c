@@ -1,6 +1,5 @@
-#include <stdio.h>
 #include <cs50.h>
-
+#include <stdio.h>
 
 int main(void)
 {
@@ -22,7 +21,7 @@ int main(void)
 
         if (counter % 2 == 0)
         {
-            even_digits = (mod_cc_number)*2;
+            even_digits = (mod_cc_number) * 2;
             // printf("\nEven digits: %i\n", even_digits);
             if (even_digits > 9)
             {
@@ -34,12 +33,14 @@ int main(void)
                     even_digits = even_digits / 10;
                     // printf("%i-%i-%i ", mod_cc_number, counter, evens);
                 }
-            } else
+            }
+            else
             {
                 evens = evens + even_digits;
                 // printf("%i-%i-%i ", mod_cc_number, counter, evens);
             }
-        } else
+        }
+        else
         {
             odds = odds + (mod_cc_number);
             // printf("%i-%i ", mod_cc_number, odds);
@@ -59,19 +60,22 @@ int main(void)
         if (mod_cc_number == 3 && counter == 15 && (starting_two == 34 || starting_two == 37))
         {
             printf("AMEX\n");
-        } else if (mod_cc_number == 4 && (counter == 13 || counter == 16))
+        }
+        else if (mod_cc_number == 4 && (counter == 13 || counter == 16))
         {
             printf("VISA\n");
-        } else if (mod_cc_number == 5 && counter == 16 && starting_two < 56)
+        }
+        else if (mod_cc_number == 5 && counter == 16 && starting_two < 56)
         {
             printf("MASTERCARD\n");
-        } else
+        }
+        else
         {
             printf("INVALID\n");
         }
-    } else
+    }
+    else
     {
         printf("INVALID\n");
     }
-
 }

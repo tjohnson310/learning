@@ -1,6 +1,6 @@
 #include <cs50.h>
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 
 int calculate_score(string a);
@@ -33,9 +33,7 @@ int main(void)
     {
         printf("Tie!\n");
     }
-
 }
-
 
 int calculate_score(string a)
 {

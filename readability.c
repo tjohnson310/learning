@@ -23,7 +23,7 @@ int main(void)
     }
     else
     {
-        printf("Grade: %i\n", (int) grade);
+        printf("Grade %i\n", (int) grade);
     }
 }
 

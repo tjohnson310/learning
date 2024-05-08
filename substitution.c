@@ -5,6 +5,7 @@
 
 void encrypt_message(string message, string key);
 int check_key(string key, int letter_count);
+string convert_key_to_upper(string key);
 
 const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -12,6 +13,7 @@ int main(int argc, string argv[])
 {
     string encryption_key = argv[1];
     check_key(encryption_key, argc);
+    encryption_key = convert_key_to_upper(encryption_key);
 
     string plaintext = get_string("plaintext: ");
     encrypt_message(plaintext, encryption_key);
@@ -85,4 +87,16 @@ int check_key(string key, int letter_count)
         used_letters[i] = key[i];
     }
     return 0;
+}
+
+string convert_key_to_upper(string key)
+{
+    for (int i = 0, n = strlen(key); i < n; i++)
+    {
+        if (islower(key[i]))
+        {
+            key[i] = toupper(key[i]);
+        }
+    }
+    return key;
 }

@@ -84,9 +84,9 @@ float get_index(string a)
 
         }
     }
-    printf("Letters: %i\n", letters_num);
-    printf("Words: %i\n", word_num);
-    printf("Sentence: %i\n", sentence_num);
+    // printf("Letters: %i\n", letters_num);
+    // printf("Words: %i\n", word_num);
+    // printf("Sentence: %i\n", sentence_num);
     float avg_letters = ((float) letters_num / (float) word_num) * 100;
     float avg_sentences = ((float) sentence_num / (float) word_num) * 100;
 

@@ -12,7 +12,13 @@ const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 int main(int argc, string argv[])
 {
     string encryption_key = argv[1];
-    check_key(encryption_key, argc);
+    int valid_key = check_key(encryption_key, argc);
+
+    if (valid_key != 0)
+    {
+        return 1;
+    }
+
     encryption_key = convert_key_to_upper(encryption_key);
 
     string plaintext = get_string("plaintext: ");
@@ -64,8 +70,8 @@ int check_key(string key, int letter_count)
 
     if (letter_count == 1 || letter_count > 2 || strlen(key) < 26)
     {
-    printf("Invalid Key: provided an incorrect number of arguments!\n");
-    return 1;
+        printf("Invalid Key: provided an incorrect number of arguments!\n");
+        return 1;
     }
 
     for (int i = 0, n = strlen(key); i < n; i++)

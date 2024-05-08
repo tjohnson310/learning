@@ -1,8 +1,8 @@
-#include <ctype.h>
 #include <cs50.h>
+#include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
 float get_index(string a);
 
@@ -81,7 +81,6 @@ float get_index(string a)
             {
                 word_num++;
             }
-
         }
     }
     // printf("Letters: %i\n", letters_num);

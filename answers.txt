@@ -1,15 +1,15 @@
-sort1 uses: Selection Sort
+sort1 uses: Bubble Sort
 
-How do you know?: The time to sort increased exponentially in both the forward and reverse arrays. The 5000 and 10000 arrays were sorted in reversed order, but the algorithm still
-                  saw exponential time increases as the arrays got larger. This indicates that the algorithm cannot detect whether the array is already sorted and must carry out
-                  every step on every index. This is indicative of Selection Sort, which has a Theta(n^2) (complexity of n^2 in both the upper and lower bounds of steps).
+How do you know?: While the time to sort increased exponentially for both the forward and reversed arrays, it was faster sorting the reversed arrays. Those arrays were sorted in
+                  reversed order, so after the initial swaps, no further steps were required. This indicates that the sorting algorithm has an exit condition which detects when
+                  the array is sorted. This is characteristic of Bubble Sort.
 
 sort2 uses: Merge Sort
 
 How do you know?: The time to sort both forward and reversed arrays increase linearly as the arrays got larger. This is indicative of Merge Sort, which has a complexity of Theta(nlogn).
 
-sort3 uses: Bubble Sort
+sort3 uses: Selection Sort
 
-How do you know?: While the time to sort increased exponentially for the forward arrays 5000 & 10000, it was faster reversing arrays 5000 and 10000. Those arrays were sorted in
-                  reversed order, so after the initial swaps, no further steps were required. This indicates that the sorting algorithm has an exit condition which detects when
-                  the array is sorted. This is characteristic of Bubble Sort.
+How do you know?: The time to sort increased exponentially in both the forward and reverse arrays. The 5000 and 10000 arrays were sorted in reversed order, but the algorithm still
+                  saw exponential time increases as the arrays got larger. This indicates that the algorithm cannot detect whether the array is already sorted and must carry out
+                  every step on every index. This is indicative of Selection Sort, which has a Theta(n^2) (complexity of n^2 in both the upper and lower bounds of steps).

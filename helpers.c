@@ -77,7 +77,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             int avg_green;
 
             // Middle pixels
-            if ((i - 1) <= 0 && (i + 1) < height && (j + 1) < width && (i - 1) >= 0 && (j - 1) >= 0)
+            if ((i - 1) > 0 && (i + 1) < height && (j + 1) < width && (j - 1) >= 0)
             {
                 avg_red = round((image[i-1][j-1].rgbtRed +  image[i-1][j].rgbtRed +  image[i-1][j+1].rgbtRed + \
                                 image[i][j-1].rgbtRed +  image[i][j].rgbtRed +  image[i][j+1].rgbtRed + \

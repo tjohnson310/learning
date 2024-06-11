@@ -112,7 +112,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 copy[i][j].rgbtRed = avg_red;
             }
             // Bottom edge
-            else if (i == height && (j - 1) >= 0 && (j + 1) < width)
+            else if (i == (height - 1) && (j - 1) >= 0 && (j + 1) < width)
             {
                 avg_red = round((image[i-1][j-1].rgbtRed +  image[i-1][j].rgbtRed +  image[i-1][j+1].rgbtRed + \
                                 image[i][j-1].rgbtRed +  image[i][j].rgbtRed +  image[i][j+1].rgbtRed) / 6.0);

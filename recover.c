@@ -3,9 +3,10 @@
 
 int main(int argc, char *argv[])
 {
+    char *raw_file;
     if (argc == 2)
     {
-        char *raw_file = argv[argc - 1];
+        raw_file = argv[argc - 1];
 
     }
     else if (argc < 2 || argc > 2)

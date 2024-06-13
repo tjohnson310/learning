@@ -1,18 +1,9 @@
 #include <cs50.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
-typedef uint8_t BYTE;
 
-typedef struct
-{
-    BYTE jfFirst;
-    BYTE jfSecond;
-    BYTE jfThird;
-    BYTE jfFourth;
-} __attribute__((__packed__))
-JPEGFILEHEADER;
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +11,6 @@ int main(int argc, char *argv[])
     if (argc == 2)
     {
         raw_file = argv[argc - 1];
-
     }
     else if (argc < 2 || argc > 2)
     {

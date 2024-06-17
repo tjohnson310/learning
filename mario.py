@@ -1,7 +1,7 @@
 height = -1
 
 
-while height <= 0 or type(height) != int:
+while height <= 0 or type(height) != int or height > 8:
     height = int(input("Height: "))
 
 

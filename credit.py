@@ -33,7 +33,7 @@ def sum_products_list(prod_list):
 
 def complete_final_sum(prod_sum, card):
     final_sum = prod_sum
-    for number in range(-1, -len(card) - 1, -2):
+    for number in range(-1, -len(card) - 2, -2):
         final_sum += int(card[number])
 
     return str(final_sum)
@@ -58,7 +58,11 @@ def determine_bank(card):
     elif card[0:2] in amex_start and get_card_checksum(card) and len(card) == amex_len:
         print("AMEX")
     else:
-        print(f"Card start: {card[0:2]}. Checksum: {get_card_checksum(card)}. Length: {len(card)}")
+        # print(f"Card start: {card[0:2]}. Checksum: {get_card_checksum(card)}. Length: {len(card)}")
         print("INVALID")
 
 determine_bank(card_num)
+
+
+# MC1: 5555555555554444
+# MC2: 5105105105105100

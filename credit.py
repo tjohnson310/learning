@@ -11,7 +11,7 @@ visa_start = "4"
 
 def get_card_products_list(card):
     products = []
-    for number in range(-2, -len(card) - 2, -2):
+    for number in range(-2, -len(card) - 1, -2):
         products.append(2*int(card[number]))
 
     return products
@@ -43,7 +43,6 @@ def get_card_checksum(card):
     products = get_card_products_list(card)
     sum_of_even_prods = sum_products_list(products)
     result = complete_final_sum(sum_of_even_prods, card)
-    print(result)
 
     if int(result[-1]) == 0:
         return True
@@ -59,7 +58,7 @@ def determine_bank(card):
     elif card[0:2] in amex_start and get_card_checksum(card) and len(card) == amex_len:
         print("AMEX")
     else:
-        # print(f"Card start: {card[0:2]}. Checksum: {get_card_checksum(card)}. Length: {len(card)}")
+        print(f"Card start: {card[0:2]}. Checksum: {get_card_checksum(card)}. Length: {len(card)}")
         print("INVALID")
 
 determine_bank(card_num)

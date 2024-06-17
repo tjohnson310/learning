@@ -54,7 +54,7 @@ bool load(const char *dictionary)
             return false;
         }
 
-        strcpy(n->word, buffer);
+        strcpy(n->word, tolower(buffer));
         int x = hash(buffer);
         table[x] = n;
     }
@@ -66,13 +66,28 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    int count = 0;
+    for (int i = 0; i < N; i++)
+    {
+        if (table[i])
+        {
+            count++;
+        }
+    }
+
+    if (count > 0)
+    {
+        return count;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    free(table);
+    return true;
 }

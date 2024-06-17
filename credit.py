@@ -53,9 +53,9 @@ def get_card_checksum(card):
 def determine_bank(card):
     if card.startswith("4") and get_card_checksum(card) and len(card) in visa_lens:
         print("VISA")
-    elif card[0:3] in mc_start and get_card_checksum(card) and len(card) == mastercard_len:
+    elif card[0:2] in mc_start and get_card_checksum(card) and len(card) == mastercard_len:
         print("MASTERCARD")
-    elif card[0:3] in amex_start and get_card_checksum(card) and len(card) == amex_len:
+    elif card[0:2] in amex_start and get_card_checksum(card) and len(card) == amex_len:
         print("AMEX")
     else:
         print("INVALID")

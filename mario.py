@@ -1,4 +1,9 @@
-height = int(input("Height: "))
+height = -1
+
+
+while height <= 0 or type(height) != int:
+    height = int(input("Height: "))
+
 
 num_of_levels = height
 

@@ -40,7 +40,7 @@ bool load(const char *dictionary)
 {
     FILE *source = fopen(dictionary, "r");
 
-    if (source != NULL)
+    if (source == NULL)
     {
         fclose(source);
         return false;

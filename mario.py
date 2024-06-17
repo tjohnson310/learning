@@ -2,7 +2,10 @@ height = -1
 
 
 while height <= 0 or type(height) != int or height > 8:
-    height = int(input("Height: "))
+    try:
+        height = int(input("Height: "))
+    except ValueError:
+        height = -1
 
 
 num_of_levels = height

@@ -9,7 +9,7 @@ num_of_levels = height
 
 for i in range(height):
     this_i = i + 1
-    level = num_of_levels - this_i
+    level = num_of_levels - this_i - 1
     spaces = level * " "
     hashes = this_i * "#"
     print(f"{spaces}{hashes}  {hashes}{spaces}")

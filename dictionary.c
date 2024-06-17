@@ -1,7 +1,10 @@
 // Implements a dictionary's functionality
 
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "dictionary.h"
 
@@ -40,7 +43,7 @@ bool load(const char *dictionary)
     if (source != NULL)
     {
         fclose(source);
-        return true;
+        return false;
     }
 
     char buffer[LENGTH + 1];
@@ -54,7 +57,12 @@ bool load(const char *dictionary)
             return false;
         }
 
-        strcpy(n->word, tolower(buffer));
+        for (int let = 0; let < strlen(buffer); let++)
+        {
+            buffer[let] = tolower(buffer[let]);
+        }
+
+        strcpy(n->word, buffer);
         int x = hash(buffer);
         table[x] = n;
     }
@@ -88,6 +96,7 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
-    free(table);
+    for (int i = 0; i < N; i++)
+        free(table[i]);
     return true;
 }

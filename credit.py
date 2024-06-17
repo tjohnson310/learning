@@ -11,7 +11,7 @@ visa_start = "4"
 
 def get_card_products_list(card):
     products = []
-    for number in range(-2, -len(card) - 1, -2):
+    for number in range(-2, -len(card) - 2, -2):
         products.append(2*int(card[number]))
 
     return products
@@ -33,7 +33,7 @@ def sum_products_list(prod_list):
 
 def complete_final_sum(prod_sum, card):
     final_sum = prod_sum
-    for number in range(-1, -len(card) - 2, -2):
+    for number in range(-1, -len(card) - 1, -2):
         final_sum += int(card[number])
 
     return str(final_sum)
@@ -43,6 +43,7 @@ def get_card_checksum(card):
     products = get_card_products_list(card)
     sum_of_even_prods = sum_products_list(products)
     result = complete_final_sum(sum_of_even_prods, card)
+    print(result)
 
     if int(result[-1]) == 0:
         return True

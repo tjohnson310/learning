@@ -58,6 +58,7 @@ def determine_bank(card):
     elif card[0:2] in amex_start and get_card_checksum(card) and len(card) == amex_len:
         print("AMEX")
     else:
+        print(f"Card start: {card[0:2]}. Checksum: {get_card_checksum(card)}. Length: {len(card)}")
         print("INVALID")
 
 determine_bank(card_num)

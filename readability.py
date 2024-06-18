@@ -10,7 +10,7 @@ def get_index(text_string):
     sentence_num = 0
 
     words = re.split(r'\W+', text_string)
-    sentences = text_string.split(". ")
+    sentences = re.split(r'[?.]', text_string)
 
     sentence_num = len(sentences)
     word_num = len(words) - 1
@@ -32,7 +32,7 @@ grade = math.ceil(get_index(text))
 if grade < 1:
     print("Before Grade 1");
 elif grade > 16:
-    print("Grade 16");
+    print("Grade 16+");
 else:
     print("Grade:", grade);
 

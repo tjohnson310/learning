@@ -32,6 +32,7 @@ def main():
 
     # print(fr"Result: {result_dict}")
 
+    there_was_a_match = False
     match = []
     for human in humans:
         current_human = human["name"]
@@ -41,9 +42,13 @@ def main():
                 match.append(True)
 
         if len(match) == len(strs):
+            there_was_a_match = True
             print(current_human)
             break
 
+    if not there_was_a_match:
+        print("No match")
+        
     return
 
 

@@ -11,7 +11,7 @@ def get_index(text_string):
 
     words = re.sub(r"[^\w'-]+", ' ', text_string)
     words = [word for word in words.split() if word]
-    sentences = re.split(r'[?.]', text_string)
+    sentences = re.split(r'[!?.]', text_string)
 
     if '' in sentences:
         sentence_num = len(sentences) - 1

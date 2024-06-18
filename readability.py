@@ -9,7 +9,7 @@ def get_index(text_string):
     word_num = 0
     sentence_num = 0
 
-    words = re.split(r'\W+', text_string)
+    words = re.findall(r"\b\w+(?:'\w+)?\b", text_string)
     sentences = re.split(r'[?.]', text_string)
 
     if '' in sentences:
@@ -23,8 +23,13 @@ def get_index(text_string):
         word_num = len(words)
 
     for word in words:
-        current_word_letter_count = len(word)
-        letters_num += current_word_letter_count
+        if "'" in word:
+            broken_word = word.split("'")
+            for word_part in broken_word:
+                letters_num += len(word_part)
+        else:
+            current_word_letter_count = len(word)
+            letters_num += current_word_letter_count
 
     average_letters = (letters_num / word_num) * 100
     average_sentences = (sentence_num / word_num) * 100

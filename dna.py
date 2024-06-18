@@ -33,8 +33,8 @@ def main():
     # print(fr"Result: {result_dict}")
 
     there_was_a_match = False
-    match = []
     for human in humans:
+        match = []
         current_human = human["name"]
 
         for _str in strs:
@@ -48,7 +48,7 @@ def main():
 
     if not there_was_a_match:
         print("No match")
-        
+
     return
 
 

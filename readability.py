@@ -17,7 +17,10 @@ def get_index(text_string):
     else:
         sentence_num = len(sentences)
 
-    word_num = len(words) - 1
+    if '' in words:
+        word_num = len(words) - 1
+    else:
+        word_num = len(words)
 
     for word in words:
         current_word_letter_count = len(word)

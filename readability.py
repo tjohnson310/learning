@@ -35,7 +35,7 @@ def get_index(text_string):
             current_word_letter_count = len(word)
             letters_num += current_word_letter_count
 
-    print(letters_num)
+    # print(letters_num)
 
     average_letters = (letters_num / word_num) * 100
     average_sentences = (sentence_num / word_num) * 100

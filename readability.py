@@ -10,6 +10,7 @@ def get_index(text_string):
     sentence_num = 0
 
     words = re.sub(r"[^\w'-]+", ' ', text_string)
+    words = [word for word in words.split() if word]
     sentences = re.split(r'[?.]', text_string)
 
     if '' in sentences:

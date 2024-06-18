@@ -45,8 +45,8 @@ def get_index(text_string):
 
     return index
 
-
-grade = math.ceil(get_index(text))
+index = get_index(text)
+grade = round(index)
 
 if grade < 1:
     print("Before Grade 1");

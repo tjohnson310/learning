@@ -10,9 +10,9 @@ def get_index(text_string):
     sentence_num = 0
 
     words = re.split(r'\W+', text_string)
-    sentences = re.split(r'[?.]', text_string)
+    sentences = re.split(r'[?.] ', text_string)
 
-    sentence_num = len(sentences)
+    sentence_num = len(sentences) - 1
     word_num = len(words) - 1
 
     for word in words:

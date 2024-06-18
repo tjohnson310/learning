@@ -12,7 +12,7 @@ def get_index(text_string):
     words = re.split(r'\W+', text_string)
     sentences = text_string.split(". ")
 
-    sentence_num = len(sentences) - 1
+    sentence_num = len(sentences)
     word_num = len(words) - 1
 
     for word in words:

@@ -1,0 +1,6 @@
+1) This listener's audio aura is most likely Pink because the average energy and danceability per song is 0.65 and higher. The valence is sitting at around 0.48 which means the lyrics can contain both optimistic and perhaps somber or depressing emotions.
+These can also be attributed to the Pink aura, since the Pink aura suggest the listener uses music to help them "navigate the twists and turns of their day (Spotify)."
+
+2) This might not be the best chracterization because we are missing some key information with respect to the other aspects of the music they listen to. For example, we do not have any idea how many times each song was listened to.
+When one looks at the tempo of the songs listened to, one finds that the bottom 20 songs have a tempo of 95bpm or less. If the data showed that the listener repeatedly listened to these songs, when compared to the other 80 songs on this list, it would indicate that the listener
+does not actually have an affinity for high energy songs.

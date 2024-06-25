@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            // Wait for DOM content to load
+            document.addEventListener('DOMContentLoaded', function() {
+
+                // Get all elements with class "correct"
+                let corrects = document.querySelectorAll('.correct');
+
+                // Add event listeners to each correct button
+                for (let i = 0; i < corrects.length; i++) {
+                    corrects[i].addEventListener('click', function() {
+
+                        // Set background color to green
+                        corrects[i].style.backgroundColor = 'Green';
+
+                        // Go to parent element of correct button and find the first element with class "feedback" which has that parent
+                        corrects[i].parentElement.querySelector('.feedback').innerHTML = 'Correct!';
+                    });
+                }
+
+                // When any incorrect answer is clicked, change color to red.
+                let incorrects = document.querySelectorAll(".incorrect");
+                for (let i = 0; i < incorrects.length; i++) {
+                    incorrects[i].addEventListener('click', function() {
+
+                        // Set background color to red
+                        incorrects[i].style.backgroundColor = 'Red';
+
+                        // Go to parent element of correct button and find the first element with class "feedback" which has that parent
+                        incorrects[i].parentElement.querySelector('.feedback').innerHTML = 'Incorrect';
+                    });
+                }
+
+                // Check free response submission
+                document.querySelector('#check').addEventListener('click', function() {
+                    let input = document.querySelector('input');
+                    if (input.value === 'Tyranny is human nature. Guns.') {
+                        input.style.backgroundColor = 'green';
+                        input.parentElement.querySelector('.feedback').innerHTML = 'Correct!';
+                    }
+                    else {
+                        input.style.backgroundColor = 'red';
+                        input.parentElement.querySelector('.feedback').innerHTML = 'Incorrect';
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- TODO: Add multiple choice question here -->
+                 <h3>
+                    In the movie "Death Proof" from Quentin Tarantino, Kurt Russell plays a character that uses his car as a weapon.
+                    In what other Kurt Russell movie does his character use a car as a weapon in the exact same manner (by slamming on the breaks,
+                    causing the victim to fly forward)?
+                 </h3>
+                 <button class="incorrect">The Christmas Chronicles</button>
+                 <button class="correct">Breakdown</button>
+                 <button class="incorrect">Overboard</button>
+                 <button class="incorrect">Vanilla Sky</button>
+                 <p class="feedback"></p>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>
+                    1) Please explain why neither a Republic nor a Socialist bureaucracy is ever completely safe from dictatorship.
+                    <br> 2) Answer in one word the following question: what can citizens use (if anything) to overthrow the dictatorship when it indeed occurs?
+                </h3>
+                <input type="text"></input>
+                <button id="check">Submit</button>
+                <p class="feedback"></p>
+            </div>
+        </div>
+    </body>
+</html>

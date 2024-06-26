@@ -1,0 +1,7 @@
+html_tags = ['meta', 'link', 'ul', 'li', 'script', 'a', 'h1', 'div', 'p', 'h3']
+css_properties = ['text-align', 'font-size', 'padding', 'text-underline-position']
+
+How I chose to use JavaScript and Bootstrap: I found the headers example at
+https://getbootstrap.com/docs/5.2/examples/headers/ and used the dev tools to extract the
+html code (and headers.css) for the second example from the top, using JavaScript to handle when the user
+selects a different header option.

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+{# Bootstrap #}
+<form method="POST" action="{{ url_for('sign_in') }}">
+    <div style="text-align: center;">
+      <a href="{{ url_for('index') }}">
+          <img class="mb-4" src="{{ url_for('static', filename='PokerStatsLogo.png') }}" alt="PokerStatsLogo" width="72" 
+          height="72" style="align-self: center;">
+      </a>
+    </div>
+
+    <div class="form-floating">
+        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+        <label for="floatingInput">Email</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 py-2">Sign In</button>
+    <ul class="nav col-12 col-md-auto mb-md-0">
+      <li class="nav-item"><a href="{{ url_for('sign_up') }}" class="nav-link px-2 header-text text-center w-100 py-3">Register</a></li>
+    </ul>
+</form>
+{% endblock %}
+
+
+

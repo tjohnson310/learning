@@ -1,0 +1,85 @@
+{% extends "index.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    {# ChatGPT #}
+    <header class="row d-flex flex-wrap flex-shrink-0 align-items-center justify-content-between py-3 mb-2 border-bottom">
+        <div class="col text-auto d-flex flex-wrap flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <symbol id="pokerstats" viewBox="0 0 118 94">
+                    <title>PokerStats</title>
+                    <image href="{{ url_for('static', filename='PokerStatsLogo.png') }}" width="120" height="94" alt="mdo"/>
+                </symbol>
+            </svg>
+            <div class="d-flex flex-wrap flex-shrink-0">
+                <a href="/" class="mb-2 mb-md-0 text-decoration-none d-block link-dark" aria-expanded="false">
+                    <svg class="bi me-2" width="100" height="48" role="img" aria-label="PokerStats"><use xlink:href="#pokerstats"></use></svg>
+                </a>
+                <span class="pokerstats-text">pokerstats</span>
+            </div>
+        </div>
+        <div class="col text-end flex-shrink-0">
+            <div class="profile-pic-container">
+                {% if user.profile_picture %}
+                    <img src="{{ url_for('uploaded_file', filename=user.profile_picture) }}" class="rounded-circle mb-4" width="72" height="72" alt="Profile Picture">
+                {% else %}
+                    <img src="{{ url_for('static', filename='empty_user.png') }}" class="rounded-circle mb-4" width="72" height="72" alt="Default Profile Picture">
+                {% endif %}
+                <div class="overlay">
+                    <form id="profilePictureForm" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="profile_picture" id="profile_picture" class="form-control-file" style="display: none;">
+                    </form>
+                    <label for="profile_picture" class="btn btn-primary">Update Profile Picture</label>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dflex justify-content-between align-items-center">
+        <h1 class="h3 mb-4 fw-normal text-center flex-grow-1" style="color:aliceblue;">Historical Poker Rounds</h1>
+        <form action="{{ url_for('new_round') }}">
+            <button type="submit" class="btn btn-primary btn-sm">New Round</button>
+        </form>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" style="color:aliceblue">Date</th>
+                <th scope="col" style="color:aliceblue">Buy-In [$]</th>
+                <th scope="col" style="color:aliceblue">Take Home [$]</th>
+                <th scope="col" style="color:aliceblue">All-In Count</th>
+                <th scope="col" style="color:aliceblue">Additional Buy-In [$]</th>
+                <th scope="col" style="color:aliceblue">Nit Loss Count</th>
+                <th scope="col" style="color:aliceblue">Seat Position</th>
+                <th scope="col" style="color:aliceblue">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for round in poker_rounds %}
+            <tr>
+                {# ChatGPT #}
+                <td style="color:aliceblue">{{ round.date.strftime('%Y-%m-%d') }}</td>
+                <td style="color:aliceblue">{{ round.buy_in }}</td>
+                <td style="color:aliceblue">{{ round.take_home }}</td>
+                <td style="color:aliceblue">{{ round.times_all_in }}</td>
+                <td style="color:aliceblue">{{ round.additional_buy_in }}</td>
+                <td style="color:aliceblue">{{ round.times_nit_loss }}</td>
+                <td style="color:aliceblue">{{ round.seat_position }}</td>
+                <td style="color:aliceblue">
+                    <form method="POST" action="{{ url_for('delete_round', round_id=round.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('profile_picture').addEventListener('change', function() {
+        document.getElementById('profilePictureForm').submit();
+    });
+</script>
+{% endblock %}

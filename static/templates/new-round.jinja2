@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+
+{% block title %}New Poker Round{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+
+    {# ChatGPT #}
+    <header class="row d-flex flex-wrap flex-shrink-0 align-items-center justify-content-between py-3 mb-2">
+        <div class="col text-auto d-flex flex-wrap flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <symbol id="pokerstats" viewBox="0 0 118 94">
+                    <title>PokerStats</title>
+                    <image href="{{ url_for('static', filename='PokerStatsLogo.png') }}" width="120" height="94" alt="mdo"/>
+                </symbol>
+            </svg>
+            <div class="d-flex flex-wrap flex-shrink-0">
+                <a href="/" class="mb-2 mb-md-0 text-decoration-none d-block link-dark" aria-expanded="false">
+                    <svg class="bi me-2" width="100" height="48" role="img" aria-label="PokerStats"><use xlink:href="#pokerstats"></use></svg>
+                </a>
+                <span class="pokerstats-text">pokerstats</span>
+            </div>
+        </div>
+    </header>
+    <h1 class="h3 mb-4 fw-normal text-center" style="color:aliceblue;">Record a New Poker Round</h1>
+    {# ChatGPT #}
+    <form method="POST" action="{{ url_for('new_round') }}" class="row custom-gutter g-0">
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="date" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Date:</label>
+                <div class="col-sm-4">
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="buy_in" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Buy-In [$]:</label>
+                <div class="col-sm-4">
+                    <input type="number" step="0.25" id="buy_in" name="buy_in" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="take_home" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Take Home [$]:</label>
+                <div class="col-sm-4">
+                    <input type="number" step="0.25" id="take_home" name="take_home" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="times_all_in" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;"># of Times All-In:</label>
+                <div class="col-sm-4">
+                    <input type="number" id="times_all_in" name="times_all_in" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="additional_buy_in" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Additional Buy-In [$]:</label>
+                <div class="col-sm-4">
+                    <input type="number" step="0.25" id="additional_buy_in" name="additional_buy_in" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="times_nit_loss" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Nit Loss Count:</label>
+                <div class="col-sm-4">
+                    <input type="number" id="times_nit_loss" name="times_nit_loss" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row align-items-center">
+                <label for="seat_position" class="col-sm-4 col-form-label text-end" style="font-size:14px;color:aliceblue;">Seat Position [1-8]:</label>
+                <div class="col-sm-4">
+                    <input type="number" id="seat_position" name="seat_position" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 text-end">
+            <div class="form-group row text-end">
+                <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

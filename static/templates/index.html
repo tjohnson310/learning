@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {# Bootstrap #}
+    <script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>{% block title %}PokerStats{% endblock %}</title>
+    <link href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&display=swap">
+    <meta name="theme-color" content="#712cf9">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='PokerStatsLogo.png') }}">
+    <script src="{{ url_for('static', filename='scripts/update_pill_on_click.js') }}" defer></script>
+    
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/headers.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/sign-in.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+    <meta name="theme-color" content="#712cf9">
+</head>
+<body class="bg-dark">
+    <main>
+        {# ChatGPT #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Bootstrap #}
+    <script>
+        document.getElementById('dropdownToggle').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default action
+
+            var dropdownMenu = this.nextElementSibling;
+            var isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+            this.setAttribute('aria-expanded', !isExpanded);
+            dropdownMenu.classList.toggle('show', !isExpanded);
+        });
+ 
+        document.addEventListener('click', function(event) {
+            var dropdownToggle = document.getElementById('dropdownToggle');
+            var dropdownMenu = dropdownToggle.nextElementSibling;
+
+            if (!dropdownToggle.contains(event.target)) {
+                dropdownToggle.setAttribute('aria-expanded', 'false');
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

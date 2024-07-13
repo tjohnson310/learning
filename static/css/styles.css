@@ -1,0 +1,108 @@
+/* styles.css */
+
+.text-center {
+    text-align: center;
+}
+
+.card {
+    margin: auto;
+    min-width: 500px;
+    max-width: 700px;
+}
+
+.card-header h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ChatGPT */
+/* General styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ChatGPT */
+/* Custom container padding */
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+/* ChatGPT */
+/* Center the card vertically and add some margin to the top */
+.card {
+    margin-top: 50px;
+}
+
+/* ChatGPT */
+/* Custom styles for the card header */
+.card-header {
+    background-color: #007bff; /* Primary color */
+    color: white;
+}
+
+/* ChatGPT */
+/* Custom styles for buttons */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* ChatGPT */
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* ChatGPT */
+/* Alert container margin */
+.alert-container {
+    margin-top: 20px;
+}
+
+/* ChatGPT */
+/* Form input styling */
+.form-control-file {
+    width: 100%;
+    text-align: center;
+}
+
+/* ChatGPT */
+.btn-block {
+    width: 100%;
+}
+
+/* ChatGPT */
+.form-group, 
+.form-control-file,
+.btn {
+    max-width: 100%;
+}
+
+/* ChatGPT */
+/* Example: Custom style for the profile picture preview */
+#profile_picture_preview {
+    display: block;
+    margin: 20px auto;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ChatGPT */
+@media (max-width: 576px) {
+    .card {
+        width: 100%;
+    }
+    .btn-block {
+        white-space: nowrap;
+    }
+}

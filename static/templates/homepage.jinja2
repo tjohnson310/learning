@@ -1,0 +1,90 @@
+{% extends "index.html" %}
+
+{% block title %}HomePage{% endblock %}
+
+{% block content %}
+<div class="container">
+    <header class="row d-flex flex-wrap flex-shrink-0 align-items-center justify-content-between py-3 mb-2 border-bottom">
+
+        {# ChatGPT #}
+        <div class="col text-auto d-flex flex-wrap flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <symbol id="pokerstats" viewBox="0 0 118 94">
+                    <title>PokerStats</title>
+                    <image href="{{ url_for('static', filename='PokerStatsLogo.png') }}" width="120" height="94" alt="mdo"/>
+                </symbol>
+            </svg>
+            <div class="d-flex flex-wrap flex-shrink-0">
+                <a href="/" class="mb-2 mb-md-0 text-decoration-none d-block link-dark" aria-expanded="false">
+                    <svg class="bi me-2" width="100" height="48" role="img" aria-label="PokerStats"><use xlink:href="#pokerstats"></use></svg>
+                </a>
+                <span class="pokerstats-text">pokerstats</span>
+            </div>
+        </div>
+
+        {# Bootstrap #}
+        <!-- <div class="col text-center d-flex flex-wrap flex-shrink-0">
+            <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li class="nav-item"><a href="#" class="nav-link active px-2" aria-current="page">Historical</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 header-text">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 header-text">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 header-text">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 header-text">About</a></li>
+            </ul>
+        </div> -->
+
+        <div class="col-auto d-flex flex-wrap flex-shrink-0">
+            <div class="dropdown">
+                <div class="homepage-pic-container">
+                    {# Bootstrap #}
+                    <a href="#" id="dropdownToggle" class="d-block link-dark text-decoration-none" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ profile_picture }}" alt="Profile Picture" width="72" height="72" class="rounded-circle mb-4">
+                    </a>
+
+                    <ul class="dropdown-menu text-small shadow" style>
+                        {% if 'user_id' in session %}
+                            <li><a class="dropdown-item" href="{{ url_for('new_round') }}">New round...</a></li>
+                            <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
+                            <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('sign_out') }}">Sign out</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{ url_for('sign_in') }}">Login</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('sign_up') }}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% if 'user_id' in session %}
+    <div class="row justify-content-center">
+        <div class="col-md-12" id="plot-container" style="text-align:center">
+            <!-- Plot will be loaded here -->
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{# ChatGPT #}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // ChatGPT
+        $.ajax({
+            url: "{{ url_for('plot') }}",
+            success: function(data) {
+                console.log('Data received from plot:', data); // Log the received data
+                if (data.plot_div) {
+                    $('#plot-container').html(data.plot_div);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching plot:', textStatus, errorThrown);
+            }
+        });
+    });
+</script>
+{% endblock %}

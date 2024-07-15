@@ -27,9 +27,12 @@ bool check(const char *word)
 {
     unsigned int index = hash(word);
 
-    if (table[index] != NULL && strcasecmp(table[index], word) == 0)
+    for (node *cursor = table[index]; cursor != NULL; cursor = cursor->next)
     {
-        return true;
+        if (strcasecmp(cursor->word, word) == 0)
+        {
+            return true;
+        }
     }
 
     return false;

@@ -41,16 +41,7 @@ bool check(const char *word)
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    unsigned int hash = 0;
-    int c;
-
-    while ((c = *word++))
-    {
-        c = toupper(c);
-        hash += c;
-    }
-
-    return hash;
+    return toupper(word[0]) - 'A';
 }
 
 // Loads dictionary into memory, returning true if successful, else false

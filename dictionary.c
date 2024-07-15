@@ -24,14 +24,29 @@ node *table[N];
 // Returns true if word is in dictionary, else false
 bool check(const char *word)
 {
-    // TODO
+    unsigned int index = hash(word);
+
+    if (table[index] != NULL && strcasecmp(table[index], word) == 0)
+    {
+        return true;
+    }
+
     return false;
 }
 
 // Hashes word to a number
 unsigned int hash(const char *word)
 {
-    return toupper(word[0]) - 'A';
+    unsigned int hash = 0;
+    int c;
+
+    while ((c = *word++))
+    {
+        c = toupper(c);
+        hash += c;
+    }
+
+    return hash;
 }
 
 // Loads dictionary into memory, returning true if successful, else false

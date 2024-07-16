@@ -114,8 +114,7 @@ def quote():
         symbol = request.form.get("symbol")
 
         if symbol == "":
-            flash(f"Please provide a stock symbol")
-            return render_template("quote.html")
+            apology(f"Please provide a stock symbol")
 
         price = lookup(symbol)
 

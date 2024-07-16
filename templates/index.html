@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" style="color:black;">Symbol</th>
+                <th scope="col" style="color:black;">Number of Shares</th>
+                <th scope="col" style="color:black;">Current Stock Price</th>
+                <th scope="col" style="color:black;">Total Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for holding in holdings %}
+                <tr>
+                    <td style="color:black;">${{ holding.symbol }}</td>
+                    <td style="color:black;">${{ holding.share_count }}</td>
+                    <td style="color:black;">${{ holding.current_price }}</td>
+                    <td style="color:black;">${{ holding.total_value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

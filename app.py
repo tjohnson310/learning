@@ -45,8 +45,35 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    """Buy shares of stock"""
-    return apology("Buy")
+    if request.method == "POST":
+        # Ensure symbol was submitted
+        symbol = request.form.get("symbol")
+        if not symbol:
+            return apology("must provide symbol", 403)
+
+        # Query database for username
+        symbol_info = lookup(symbol)
+
+        if symbol_info is None:
+            return apology(f"{symbol} is not a valid stock symbol.")
+
+        price = symbol_info["price"]
+        available_cash = db.execute(
+            "SELECT cash FROM users WHERE username = ?", session["username"]
+        )
+
+        share_count = int(request.form.get("shares"))
+        if share_count <= 0:
+            return apology(f"Please enter a value greater than 0.")
+
+        total_cost = float(price) * float(share_count)
+        if total_cost > available_cash[0]["cash"]:
+            return apology("Sorry...it looks like you don't have enough to complete this purchase.")
+
+        return redirect("/")
+
+
+    return render_template("buy.html")
 
 
 @app.route("/history")
@@ -86,6 +113,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")

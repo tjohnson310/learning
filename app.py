@@ -192,5 +192,22 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    """Sell shares of stock"""
-    return apology("Sell")
+    if request.method == "POST":
+        # Ensure symbol was submitted
+        symbol = request.form.get("symbol")
+        if not symbol:
+            return apology("must provide symbol", 403)
+
+        # Query database for username
+        symbol_info = lookup(symbol)
+
+        if symbol_info is None:
+            return apology(f"{symbol} is not a valid stock symbol.")
+
+        share_count = int(request.form.get("shares"))
+        if share_count <= 0:
+            return apology(f"Please enter a value greater than 0.")
+
+        return redirect("/")
+
+    return render_template("sell.html")

@@ -63,8 +63,8 @@ def buy():
         )
 
         share_count = int(request.form.get("shares"))
-        if share_count <= 0:
-            return apology(f"Please enter a value greater than 0.")
+        if share_count <= 0 or type(share_count) != int:
+            return apology(f"Please enter an integer value greater than 0.")
 
         total_cost = float(price) * float(share_count)
         if total_cost > available_cash[0]["cash"]:

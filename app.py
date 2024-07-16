@@ -62,7 +62,11 @@ def buy():
             "SELECT cash FROM users WHERE username = ?", session["username"]
         )
 
-        share_count = int(request.form.get("shares"))
+        try:
+            share_count = int(request.form.get("shares"))
+        except ValueError:
+            return apology(f"Please enter an integer value greater than 0.")
+
         if share_count <= 0 or type(share_count) != int:
             return apology(f"Please enter an integer value greater than 0.")
 
@@ -204,7 +208,11 @@ def sell():
         if symbol_info is None:
             return apology(f"{symbol} is not a valid stock symbol.")
 
-        share_count = int(request.form.get("shares"))
+        try:
+            share_count = int(request.form.get("shares"))
+        except ValueError:
+            return apology(f"Please enter an integer value greater than 0.")
+
         if share_count <= 0:
             return apology(f"Please enter a value greater than 0.")
 

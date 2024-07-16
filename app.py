@@ -115,7 +115,7 @@ def quote():
 
         if symbol == "":
             flash(f"Please provide a stock symbol")
-            return redirect_template("quote.html")
+            return render_template("quote.html")
 
         price = lookup(symbol)
 

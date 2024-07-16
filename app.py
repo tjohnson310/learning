@@ -113,12 +113,15 @@ def quote():
     if request.method == "POST":
         symbol = request.form.get("symbol")
 
-        if symbol is None:
-            return apology(f"No available data for {symbol}")
+        if symbol == "":
+            flash(f"Please provide a stock symbol")
+            return redirect_template("quote.html")
 
         price = lookup(symbol)
 
-        print(price["price"])
+        if price is None:
+            return apology(f"No price info for {symbol}")
+
         return render_template("quoted.html", price=str(price["price"]), symbol=symbol)
 
     return render_template("quote.html")

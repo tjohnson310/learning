@@ -35,21 +35,21 @@ def after_request(response):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    return apology("Index")
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    return apology("Buy")
 
 
 @app.route("/history")
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    return apology("History")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -106,7 +106,18 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+
+        if symbol is None:
+            return apology(f"No available data for {symbol}")
+
+        price = lookup(symbol)
+
+        print(price["price"])
+        return render_template("quoted.html", price=str(price["price"]), symbol=symbol)
+
+    return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -148,4 +159,4 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    return apology("Sell")

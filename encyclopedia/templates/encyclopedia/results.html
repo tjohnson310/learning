@@ -1,0 +1,19 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Did you mean...?</title>
+        <link href="{% static 'encyclopedia/styles.css' %}"  rel="stylesheet">
+    </head>
+    <body>
+        <h2 style="text-align: center;">
+              Did you mean...?
+        </h2>
+        <ul>
+            {% for entry in entries %}
+                <li><a href="wiki/{{ entry }}">{{ entry }}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

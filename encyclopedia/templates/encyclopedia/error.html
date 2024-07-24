@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ error_type }}</title>
+        <link href="{% static 'encyclopedia/styles.css' %}"  rel="stylesheet">
+    </head>
+    <body>
+        <h1 style="text-align: center;">{{ error_type }}</h1>
+        <h2 style="text-align: center;">
+  	    <hr size="2" width="100%">
+            We're sorry...
+        </h2>
+        <p style="text-align: center;font-size:large">
+            <br>
+            {{ error_message }}
+            <br>
+        </p>
+    </body>
+</html>

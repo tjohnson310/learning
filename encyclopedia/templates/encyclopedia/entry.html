@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ entry_name }}</title>
+        <link href="{% static 'encyclopedia/styles.css' %}"  rel="stylesheet">
+    </head>
+    <body>
+        <header style="text-align: center;">
+            <a href="{% url 'edit_page' entry_name %}">Edit {{ entry_name }}</a>
+        </header>
+        {% block body %}
+        {{ entry|safe }}
+        {% endblock %}
+    </body>
+</html>

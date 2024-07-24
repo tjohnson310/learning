@@ -1,0 +1,22 @@
+{% extends "encyclopedia/page.html" %}
+
+{% block title %}
+    Edit Existing Page
+{% endblock %}
+
+{% block body %}
+    <body>
+        <h2 style="text-align: center;">
+              Edit the {{ page_name }} Page
+        </h2>
+        <form action="{% url 'edit_page' page_name %}" method="POST">
+            {% csrf_token %}
+            <label>Update the page contents here:</label>
+            <br>
+            <div class="row">
+                <textarea id="new_page_contents" name="new_page_contents" style="width: 80%; height: 300px;">{{ content }}</textarea>
+            </div>
+            <input type="submit" value="Save">
+        </form>
+    </body>
+{% endblock %}

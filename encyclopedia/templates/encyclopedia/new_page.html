@@ -1,0 +1,26 @@
+{% extends "encyclopedia/page.html" %}
+
+{% block title %}
+    Create New Page
+{% endblock %}
+
+{% block body %}
+    <body>
+        <h2 style="text-align: center;">
+              Create a New Page
+        </h2>
+        <form action="{% url 'new_page' %}" method="POST">
+            {% csrf_token %}
+            <div class="row align-items-center">
+                <div class="mb-3">
+                    <input type="text" name="title" placeholder="Title of the page...">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <textarea id="new_page_contents" name="content" style="width: 80%; height: 300px;"></textarea>
+            </div>
+            <input type="submit" value="Save">
+        </form>
+    </body>
+{% endblock %}

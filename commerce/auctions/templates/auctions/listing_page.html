@@ -1,0 +1,72 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Listing Page{% endblock %}
+
+{% block page_name %}{{ listing.title }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-2 position-relative">
+            {% if user == listing.listing_user.username %}
+                <div class="position-absolute start-0">
+                    <form action="{% url 'close_auction' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" style="background-color: maroon;color: white">Close Auction</button>
+                    </form>
+                </div>
+            {% else %}
+                {% if not remove %}
+                    <div class="position-absolute start-0">
+                        <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: rgb(206, 203, 203);color: black; border-radius: 15px">Add to Watchlist</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="position-absolute start-0">
+                        <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: rgb(206, 203, 203);color: black; border-radius: 15px">Remove from Watchlist</button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <div class="text-center">
+                <h1 class="text-center mb-3" style="color: black;margin-top: 20px">{{ listing.title }} [${{ listing.starting_bid }}]</h1>
+            </div>
+            {% if user != listing.listing_user.username and user_is_valid %}
+                <div class="position-absolute end-0">
+                    <form action="{% url 'update_bid' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <span style="margin-right: 5px;">$</span>
+                        <input type="number" id="new_bid" name="new_bid" style="background-color: white; color: black; border-radius: 10px; width: 100px" step="0.5" min="{{ listing.starting_bid }}" placeholder="{{ listing.starting_bid }}">
+                        <button type="submit" style="background-color: rgb(202, 199, 199); color: black; width: 50px; border-radius: 10px">Bid</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        {% if listing.image_url != "" %}
+            <div class="row align-items-center text-center">
+                    <div  class="col align-items-center">
+                        <img src="{{ listing.image_url }}" alt="Image of {{ active_listing.title }}" width="300px" height="auto">
+                    </div>
+            </div>
+        {% endif %}
+        <hr class="my-4 mx-0" style="border: 1px solid black;margin-top: 20px">
+        <div class="container align-items-center" width="300px" height="auto">
+            <div class="row d-flex flex-wrap flex-shrink-0 justify-content-between py-3 mb-2">
+                <div class="col-auto dflex flex-wrap">
+                    <small style="font-weight: bold;">Description:</small>
+                </div>
+                <div class="col-auto dflex flex-wrap text-center">
+                    {% if listing.category != "" %}
+                        <small style="font-weight: bold;">Category: {{ listing.category }}</small>
+                    {% endif %}
+                </div>
+                <p class="text-left">{{ listing.description }}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

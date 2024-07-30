@@ -1,0 +1,48 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Create New Listing{% endblock %}
+
+{% block body %}
+    <form action="{% url 'create_new_listing' %}" method="POST">
+        {% csrf_token %}
+        {% block page_name %}Create New Listing{% endblock %}
+        <div class="row align-items-center justify-content-between" style="margin-left: 45px">
+            <div class="col-auto text-left">
+                <div class="mb-3">
+                    <input type="text" name="title" placeholder="Listing Title...">
+                </div>
+            </div>
+            <div class="col-auto text-left">
+                <div class="mb-3">
+                    $<input type="number" name="starting_bid" placeholder="Starting Bid">
+                </div>
+            </div>
+            <div class="col-auto text-right">
+                <div class="mb-3" style="margin-right: 45px;">
+                    <input type="checkbox" name="category_check" id="get_category">
+                    <select name="category" id="category">
+                        <option value="fashion">Fashion</option>
+                        <option value="toys">Toys</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="home">Home</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-auto text-right">
+                <div class="mb-3" style="margin-right: 45px;">
+                    <input type="checkbox" name="url_check" id="get_image_url">
+                    <input type="text" name="image_url" placeholder="URL to an image of your listing...">
+                </div>
+            </div>
+        </div>
+        <div id="textFields" class="row align-items-center">
+            <textarea id="new_listing" name="new_listing" style="width: 80%; height: 300px;"
+                placeholder="Please write the description of your listing, here."></textarea>
+        </div>
+        <div class="row mb-4">
+            <div class="container text-center">
+                <input class="btn btn-primary" type="submit" value="Post New Listing">
+            </div>
+        </div>
+    </form>
+{% endblock %}

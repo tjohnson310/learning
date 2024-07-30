@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lan="en">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <link href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <style>
+            #textFields {
+                display: flex;
+                flex-direction: column;
+                vertical-align: middle;
+              }
+            .center {
+                margin: auto;
+                display: block;
+                text-align: center;
+                margin-left: 550px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header class="row d-flex flex-wrap flex-shrink-0 justify-content-between py-3 mb-2 border-bottom">
+                <div class="col-auto d-flex flex-wrap">
+                    <a href="{% url 'index' %}">Home</a>
+                </div>
+                <div class="col-auto d-flex flex-wrap text-center" style="text-align: center;">
+                    <span style="color: black;">{% block page_name %}{% endblock %}</span>
+                </div>
+            </header>
+        </div>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    {% for active_listing in listings %}
+        <div class="row">
+            <form action="{% url 'delete_listing' active_listing.id %}" method="POST">
+                {% csrf_token %}
+                <div class="col">
+                    <b style="font-weight: bold; font-size: larger">
+                        <a href="{% url 'nav_to_listing' active_listing.id %}">{{ active_listing.title }} [${{ active_listing.current_bid }}]</a></b>
+                    <small style="font-size: 12px">{{ active_listing.description }}
+                        {% if active_listing.image_url != "" %}
+                            <img src="{{ active_listing.image_url }}" alt="Image of {{ active_listing.title }}" width="50px" height="auto">
+                        {% endif %}
+                        <button style="background-color: maroon; color: white">Delete</button>
+                    </small>
+                </div>
+            </form>
+        </div>
+    {% endfor %}
+{% endblock %}

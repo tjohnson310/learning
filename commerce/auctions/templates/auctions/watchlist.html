@@ -1,0 +1,14 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Watchlist{% endblock %}
+
+{% block page_name %}Watchlist{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for listing in watchlist_listings %}
+            <li><a href="{% url 'nav_to_listing' listing.0 %}">{{ listing.1 }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

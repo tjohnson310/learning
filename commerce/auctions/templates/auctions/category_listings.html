@@ -1,14 +1,14 @@
 {% extends "auctions/base_listing.html" %}
 
-{% block title %}Watchlist{% endblock %}
+{% block title %}"{{ category }}" Listings{% endblock %}
 
-{% block page_name %}Watchlist{% endblock %}
+{% block page_name %}"{{ category }}" Listings{% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-2 position-relative">
+        <div class="d-flex flex-wrap align-items-center justify-content-start py-3 mb-2 position-relative">
             <ul>
-                {% for listing in watchlist_listings %}
+                {% for listing in category_listings %}
                     <li><a href="{% url 'nav_to_listing' listing.0 %}">{{ listing.1 }}</a></li>
                 {% endfor %}
             </ul>

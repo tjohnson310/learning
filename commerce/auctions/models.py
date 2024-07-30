@@ -15,6 +15,9 @@ class Listing(models.Model):
     starting_bid = models.DecimalField(decimal_places=2, max_digits=10)
     image_url = models.CharField(max_length=300)
     category = models.CharField(max_length=64)
+    closed = models.BooleanField(default=False)
+    winner = models.CharField(max_length=100, default="No winner")
+    comments = models.JSONField(default=list)
 
     def __str__(self):
         return f"{self.title}"

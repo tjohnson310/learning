@@ -14,7 +14,9 @@
                         {% if active_listing.image_url != "" %}
                             <img src="{{ active_listing.image_url }}" alt="Image of {{ active_listing.title }}" width="50px" height="auto">
                         {% endif %}
-                        <button style="background-color: maroon; color: white">Delete</button>
+                        {% if user == "Admin" %}
+                            <button style="background-color: maroon; color: white">Delete</button>
+                        {% endif %}
                     </small>
                 </div>
             </form>

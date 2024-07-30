@@ -9,7 +9,8 @@ from .models import User, Listing, Bid, Comment, Watchlist
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all()
+        "listings": Listing.objects.all(),
+        "user": request.user.username
     })
 
 
@@ -81,8 +82,8 @@ def create_new_listing(request):
         else:
             category = request.POST["category"].capitalize()
 
-        print(f"Category checked: {category_checked}")
-        print(f"Category; {category}")
+        # print(f"Category checked: {category_checked}")
+        # print(f"Category; {category}")
 
         if not image_url_checked:
             image_url = ""
@@ -124,7 +125,7 @@ def nav_to_listing(request, listing_id):
         try:
             watchlist = Watchlist.objects.get(user=request.user)
         except Exception as e:
-            print(f"WL Error: {e}")
+            print(f"Unexpected Watchlist Error: {e}")
             watchlist = Watchlist(user=request.user)
             watchlist.save()
         
@@ -132,51 +133,66 @@ def nav_to_listing(request, listing_id):
         if watchlist.listings.count() > 0:
             if listing in watchlist.listings.all():
                 remove = True
+                
+    print(f"Closed: {listing.closed}")
                        
 
     return render(request, "auctions/listing_page.html", {
         "user": request.user.username,
         "listing": listing,
         "user_is_valid": user_is_valid,
-        "remove": remove
+        "remove": remove,
+        "closed": listing.closed,
+        "winner": listing.winner
     })
 
 def update_bid(request, listing_id):
     if request.method == 'POST':
-        new_bid = float(request.POST['new_bid'])
-        listing = Listing.objects.get(pk=listing_id)
-        current_bid = listing.starting_bid
+        try:
+            new_bid = float(request.POST['new_bid'])
+            listing = Listing.objects.get(pk=listing_id)
+            current_bid = listing.starting_bid
 
-        if new_bid > current_bid:
-            listing_bid = Bid(bidding_user=request.user, 
-                            listing=listing, new_bid=new_bid)
-            listing_bid.save()
+            if new_bid > current_bid:
+                listing_bid = Bid(bidding_user=request.user, 
+                                listing=listing, new_bid=new_bid)
+                listing_bid.save()
 
-            listing.starting_bid = new_bid
-            listing.save()
+                listing.starting_bid = new_bid
+                listing.save()
 
-            user_is_valid = isinstance(request.user, User)
+                user_is_valid = isinstance(request.user, User)
 
-            return render(request, 'auctions/listing_page.html', {
-                    "listing": listing,
-                    "user_is_valid": user_is_valid
-                })
-        else:
-            return HttpResponse('New bid must be greater than the current listing!')
+                return render(request, 'auctions/listing_page.html', {
+                        "listing": listing,
+                        "user_is_valid": user_is_valid
+                    })
+            else:
+                return HttpResponse('New bid must be greater than the current listing!')
+        except ValueError:
+            return HttpResponse("Please provide a valid bid!")
 
 def close_auction(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     bids = Bid.objects.filter(listing_id=listing_id)
+    user_is_valid = isinstance(request.user, User)
+    listing.closed = True
 
     for bid in bids:
         if bid.new_bid == listing.starting_bid:
             print(f"Auction winner: {bid.bidding_user.username}")
+            listing.winner = bid.bidding_user.username
             break
-
-    Listing.objects.filter(pk=listing_id).delete()
+        
+    listing.save()
     
-    return render(request, 'auctions/index.html', {
-            'listings': Listing.objects.all()
+    return render(request, 'auctions/listing_page.html', {
+            "user": request.user.username,
+            "listing": listing,
+            "user_is_valid": user_is_valid,
+            "remove": True,
+            "closed": listing.closed,
+            "winner": listing.winner
         })
 
 def add_to_watchlist(request, listing_id):
@@ -203,7 +219,9 @@ def add_to_watchlist(request, listing_id):
             "user": request.user.username,
             "listing": listing,
             "user_is_valid": user_is_valid,
-            "remove": True
+            "remove": True,
+            "closed": listing.closed,
+            "winner": listing.winner
         })
     
 def remove_from_watchlist(request, listing_id):
@@ -226,7 +244,9 @@ def remove_from_watchlist(request, listing_id):
             "user": request.user.username,
             "listing": listing,
             "user_is_valid": user_is_valid,
-            "remove": False
+            "remove": False,
+            "closed": listing.closed,
+            "winner": listing.winner
         })
     
 def navigate_to_watchlist(request):
@@ -238,12 +258,109 @@ def navigate_to_watchlist(request):
     print(f"Listings: {listings}")
 
     titles_ids_of_listings = []
-    for listing in listings:
-        titles_ids_of_listings.append((listing["listings"], Listing.objects.get(pk=listing["listings"]).title))
+    if listings[0]["listings"] is not None:
+        for listing in listings:
+            titles_ids_of_listings.append((listing["listings"], Listing.objects.get(pk=listing["listings"]).title))
 
     print(f"Listings: {titles_ids_of_listings}")
    
-
     return render(request, "auctions/watchlist.html", {
         "watchlist_listings": titles_ids_of_listings
     })
+    
+def add_comment(request, listing_id):
+    if request.method == "POST":
+        user_is_valid = isinstance(request.user, User)
+        listing_id = int(listing_id)
+        listing = Listing.objects.get(pk=listing_id)
+        print(f"Comment: {request.POST.get('new_comment')}")
+        listing.comments.append({"user": request.user.username, "comment": request.POST.get("new_comment")})
+        listing.save()
+        return render(request, "auctions/listing_page.html", {
+            "user": request.user.username,
+            "listing": listing,
+            "user_is_valid": user_is_valid,
+            "remove": False,
+            "closed": listing.closed,
+            "winner": listing.winner
+        })
+        
+def nav_to_categories(request):
+    listings = Listing.objects.all()
+    categories = []
+    for listing in listings:
+        if listing.category not in categories:
+            categories.append(listing.category)
+    
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+def listings_in_category(request, category):
+    category_listings = []
+    listings = Listing.objects.all()
+    for listing in listings:
+        if listing.category == category:
+            category_listings.append((listing.id, listing.title))
+            
+    return render(request, "auctions/category_listings.html", {
+        "category": category,
+        "category_listings": category_listings
+    })
+
+def edit_comment(request, comment, listing_id, user):
+    return render(request, "auctions/edit_comment.html", {
+        "comment": comment,
+        "listing_id": listing_id,
+        "user": user
+    })
+
+def update_comment(request, listing_id, user):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        updated_comment = request.POST.get("updated_comment")
+        user_is_valid = isinstance(request.user, User)
+        for comment in listing.comments:
+            if comment["user"] == user:
+                comment["comment"] = updated_comment
+                listing.save()
+                break
+        
+        return render(request, "auctions/listing_page.html", {
+            "user": request.user.username,
+            "listing": listing,
+            "user_is_valid": user_is_valid,
+            "remove": False,
+            "closed": listing.closed,
+            "winner": listing.winner
+        })
+    
+def edit_listing(request, listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        return render(request, "auctions/edit_listing.html", {
+            "listing_id": listing.id,
+            "title": listing.title,
+            "current_bid": listing.starting_bid,
+            "image_url": listing.image_url,
+            "description": listing.description
+        })
+
+def submit_edits(request, listing_id):
+    if request.method == "POST":
+        user_is_valid = isinstance(request.user, User)
+        listing = Listing.objects.get(pk=listing_id)
+        listing.title = request.POST.get("title")
+        listing.category = request.POST.get("category").capitalize()
+        listing.description = request.POST.get("new_listing")
+        listing.starting_bid = request.POST.get("starting_bid")
+        listing.image_url = request.POST.get("image_url")
+        listing.save()
+        return render(request, "auctions/listing_page.html", {
+            "user": request.user.username,
+            "listing": listing,
+            "user_is_valid": user_is_valid,
+            "remove": False,
+            "closed": listing.closed,
+            "winner": listing.winner
+        })

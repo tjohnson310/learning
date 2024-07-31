@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment, Watchlist
@@ -120,6 +121,7 @@ def delete_listing(request, listing_id):
 def nav_to_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     user_is_valid = isinstance(request.user, User)
+    bids = Bid.objects.filter(listing=listing)
 
     if user_is_valid:
         try:
@@ -133,6 +135,8 @@ def nav_to_listing(request, listing_id):
         if watchlist.listings.count() > 0:
             if listing in watchlist.listings.all():
                 remove = True
+    else:
+        remove = False
                 
     print(f"Closed: {listing.closed}")
                        
@@ -143,7 +147,8 @@ def nav_to_listing(request, listing_id):
         "user_is_valid": user_is_valid,
         "remove": remove,
         "closed": listing.closed,
-        "winner": listing.winner
+        "winner": listing.winner,
+        "bids": bids
     })
 
 def update_bid(request, listing_id):
@@ -151,24 +156,40 @@ def update_bid(request, listing_id):
         try:
             new_bid = float(request.POST['new_bid'])
             listing = Listing.objects.get(pk=listing_id)
-            current_bid = listing.starting_bid
+            user_is_valid = isinstance(request.user, User)
 
-            if new_bid > current_bid:
-                listing_bid = Bid(bidding_user=request.user, 
-                                listing=listing, new_bid=new_bid)
-                listing_bid.save()
+            current_bid = Bid.objects.aggregate(Max('new_bid'))['new_bid__max']
 
-                listing.starting_bid = new_bid
-                listing.save()
+            if current_bid is not None:
+                if new_bid > current_bid:
+                    bid = Bid.objects.filter(listing=listing, bidding_user=request.user)
+                    if not bid.exists():
+                        bid.new_bid = new_bid
+                        bid.save()
+                    else:
+                        listing_bid = Bid(bidding_user=request.user, 
+                                        listing=listing, new_bid=new_bid)
+                        listing_bid.save()
 
-                user_is_valid = isinstance(request.user, User)
-
-                return render(request, 'auctions/listing_page.html', {
-                        "listing": listing,
-                        "user_is_valid": user_is_valid
-                    })
+                    return render(request, 'auctions/listing_page.html', {
+                            "listing": listing,
+                            "user_is_valid": user_is_valid
+                        })
+                else:
+                    return HttpResponse('Your bid must be greater than the top bid!')
             else:
-                return HttpResponse('New bid must be greater than the current listing!')
+                listing_bid = Bid(bidding_user=request.user, 
+                listing=listing, new_bid=new_bid)
+                listing_bid.save()
+                return render(request, 'auctions/listing_page.html', {
+                        "user": request.user.username,
+                        "listing": listing,
+                        "user_is_valid": user_is_valid,
+                        "remove": False,
+                        "closed": listing.closed,
+                        "winner": listing.winner,
+                        "bids": Bid.objects.filter(listing=listing)
+                    })
         except ValueError:
             return HttpResponse("Please provide a valid bid!")
 
@@ -192,7 +213,8 @@ def close_auction(request, listing_id):
             "user_is_valid": user_is_valid,
             "remove": True,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": bids
         })
 
 def add_to_watchlist(request, listing_id):
@@ -200,6 +222,7 @@ def add_to_watchlist(request, listing_id):
         listing_id = int(listing_id)
         listing = Listing.objects.get(pk=listing_id)
         user_is_valid = isinstance(request.user, User)
+        bids = Bid.objects.filter(listing=listing)
 
         try:
             watchlist = Watchlist.objects.get(user=request.user)
@@ -221,7 +244,8 @@ def add_to_watchlist(request, listing_id):
             "user_is_valid": user_is_valid,
             "remove": True,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": bids
         })
     
 def remove_from_watchlist(request, listing_id):
@@ -229,6 +253,7 @@ def remove_from_watchlist(request, listing_id):
         listing_id = int(listing_id)
         listing = Listing.objects.get(pk=listing_id)
         user_is_valid = isinstance(request.user, User)
+        bids = Bid.objects.filter(listing=listing)
 
         try:
             watchlist = Watchlist.objects.get(user=request.user)
@@ -246,7 +271,8 @@ def remove_from_watchlist(request, listing_id):
             "user_is_valid": user_is_valid,
             "remove": False,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": bids
         })
     
 def navigate_to_watchlist(request):
@@ -276,13 +302,15 @@ def add_comment(request, listing_id):
         print(f"Comment: {request.POST.get('new_comment')}")
         listing.comments.append({"user": request.user.username, "comment": request.POST.get("new_comment")})
         listing.save()
+        bids = Bid.objects.filter(listing=listing)
         return render(request, "auctions/listing_page.html", {
             "user": request.user.username,
             "listing": listing,
             "user_is_valid": user_is_valid,
             "remove": False,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": bids
         })
         
 def nav_to_categories(request):
@@ -320,6 +348,7 @@ def update_comment(request, listing_id, user):
         listing = Listing.objects.get(pk=listing_id)
         updated_comment = request.POST.get("updated_comment")
         user_is_valid = isinstance(request.user, User)
+        bids = Bid.objects.filter(listing=listing)
         for comment in listing.comments:
             if comment["user"] == user:
                 comment["comment"] = updated_comment
@@ -332,12 +361,14 @@ def update_comment(request, listing_id, user):
             "user_is_valid": user_is_valid,
             "remove": False,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": bids
         })
     
 def edit_listing(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
+        bids = Bid.objects.filter(listing=listing)
         return render(request, "auctions/edit_listing.html", {
             "listing_id": listing.id,
             "title": listing.title,
@@ -363,4 +394,40 @@ def submit_edits(request, listing_id):
             "remove": False,
             "closed": listing.closed,
             "winner": listing.winner
+        })
+
+
+def edit_bid(request, bid_id):
+    current_bid_price = Bid.objects.filter(id=bid_id).new_bid
+    return render(request, "auctions/edit_bid.html", {
+      "current_bid": current_bid_price  
+    })
+
+def submit_bid_edit(request, bid_id, new_bid):
+    current_bid = Bid.objects.filter(id=bid_id)
+    current_bid.new_bid = new_bid
+    user_is_valid = isinstance(request.user, User)
+    return render(request, "auctions/listing_page.html", {
+            "user": request.user.username,
+  	        "listing": current_bid.listing,
+            "user_is_valid": user_is_valid,
+            "remove": False,
+            "closed": current_bid.listing.closed,
+            "winner": current_bid.listing.winner
+        })
+
+def delete_bid(request, bid_id):
+    user_bid = get_object_or_404(Bid, pk=bid_id)
+    listing = user_bid.listing
+    all_bids = Bid.objects.filter(listing=listing)
+    user_bid.delete()
+    user_is_valid = isinstance(request.user, User)
+    return render(request, "auctions/listing_page.html", {
+            "user": request.user.username,
+  	        "listing": listing,
+            "user_is_valid": user_is_valid,
+            "remove": False,
+            "closed": listing.closed,
+            "winner": listing.winner,
+            "bids": all_bids
         })

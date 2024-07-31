@@ -21,5 +21,8 @@ urlpatterns = [
     path("edit_comment/<str:comment>/<str:listing_id>/<str:user>", views.edit_comment, name="edit_comment"),
     path("update_comment/<int:listing_id>/<str:user>", views.update_comment, name="update_comment"),
     path("edit_listing/<int:listing_id>", views.edit_listing, name="edit_listing"),
-    path("submit_edits/<int:listing_id>", views.submit_edits, name="submit_edits")
+    path("submit_edits/<int:listing_id>", views.submit_edits, name="submit_edits"),
+    path("edit_bid/<int:bid_id>", views.edit_bid, name="edit_bid"),
+    path("delete_bid/<int:bid_id>", views.delete_bid, name="delete_bid"),
+    path("submit_bid_edit/<int:bid_id>/<int:new_bid>/", views.submit_bid_edit, name="submit_bid_edit")
 ]

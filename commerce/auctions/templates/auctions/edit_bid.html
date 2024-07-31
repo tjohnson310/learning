@@ -1,0 +1,17 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Edit Bid{% endblock %}
+
+{% block body %}
+    <form action="{% url 'submit_bid_edit' bid_id %}" method="POST">
+        {% csrf_token %}
+        {% block page_name %}Edit Bid{% endblock %}
+        <div class="row align-items-center justify-content-between" style="margin-left: 45px">
+            <div class="col-auto text-left">
+                <div class="mb-3">
+                    <input type="number" name="new_bid" value="{{ current_bid }}">
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

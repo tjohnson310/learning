@@ -1,0 +1,47 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Edit Listing{% endblock %}
+
+
+{% block page_name %}Edit Listing{% endblock %}
+
+{% block body %}
+    <form action="{% url 'submit_edits' listing_id %}" method="POST">
+        {% csrf_token %}
+        <div class="row align-items-center justify-content-between" style="margin-left: 45px">
+            <div class="col-auto text-left">
+                <div class="mb-3">
+                    <input type="text" name="title" value="{{ title }}">
+                </div>
+            </div>
+            <div class="col-auto text-left">
+                <div class="mb-3">
+                    $<input type="number" name="starting_bid" value="{{ current_bid }}">
+                </div>
+            </div>
+            <div class="col-auto text-right">
+                <div class="mb-3" style="margin-right: 45px;">
+                    <select name="category" id="category">
+                        <option value="fashion" {% if selected_category == "Fashion" %}selected{% endif %}>Fashion</option>
+                        <option value="toys" {% if selected_category == "Toys" %}selected{% endif %}>Toys</option>
+                        <option value="electronics" {% if selected_category == "Electronics" %}selected{% endif %}>Electronics</option>
+                        <option value="home" {% if selected_category == "Home" %}selected{% endif %}>Home</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-auto text-right">
+                <div class="mb-3" style="margin-right: 45px;">
+                    <input type="text" name="image_url" value="{{ image_url }}">
+                </div>
+            </div>
+        </div>
+        <div id="textFields" class="row align-items-center">
+            <textarea id="new_listing" name="new_listing" style="width: 80%; height: 300px;">{{ description }}</textarea>
+        </div>
+        <div class="row mb-4">
+            <div class="container text-center">
+                <input class="btn btn-primary" type="submit" value="Submit Edits">
+            </div>
+        </div>
+    </form>
+{% endblock %}

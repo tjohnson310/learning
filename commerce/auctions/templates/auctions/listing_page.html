@@ -1,0 +1,172 @@
+{% extends "auctions/base_listing.html" %}
+
+{% block title %}Listing Page{% endblock %}
+
+{% block page_name %}{{ listing.title }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-2 position-relative">
+            {% if user == listing.listing_user.username %}
+                {% if closed %}
+                    {% if user == winner %}
+                        <div class="position-absolute start-0">
+                            <input type="button" disabled value="Closed. You won! " style="background-color: red; color: white;">
+                        </div>
+                    {% else %}
+                        <div class="position-absolute start-0">
+                            <input type="button" disabled value="Closed." style="background-color: red; color: white;">
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="position-absolute start-0">
+                        <form action="{% url 'close_auction' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" style="background-color: maroon;color: white">Close Auction</button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if not closed %}
+                    {% if not remove %}
+                        <div class="position-absolute start-0">
+                            <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" style="background-color: rgb(206, 203, 203);color: black; border-radius: 15px">Add to Watchlist</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="position-absolute start-0">
+                            <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" style="background-color: rgb(202, 199, 199);color: black; border-radius: 15px">Remove from Watchlist</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {% if user == winner %}
+                        <div class="position-absolute start-0">
+                            <input type="button" disabled value="Closed. You won! " style="background-color: red; color: white;">
+                        </div>
+                    {% else %}
+                        <div class="position-absolute start-0">
+                            <input type="button" disabled value="Closed." style="background-color: red; color: white;">
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            <div class="text-center">
+                {% if user == "Admin" %}
+                    <form action="{% url 'edit_listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button style="background-color: rgb(202, 199, 199); color: black;border-radius: 10px;height: 30px">Edit Listing</button>
+                    </form>
+                {% endif %}
+                <h1 class="text-center mb-3 responsive-title" style="color: black;margin-top: 20px;">{{ listing.title }} [${{ listing.starting_bid }}]</h1>
+            </div>
+            {% if user != listing.listing_user.username and user_is_valid and not closed %}
+                <div class="position-absolute end-0">
+                    <form action="{% url 'update_bid' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <span style="margin-right: 5px;">$</span>
+                        <input type="number" id="new_bid" name="new_bid" style="background-color: white; color: black; border-radius: 10px; width: 100px" step="0.5" min="{{ listing.starting_bid }}" placeholder="{{ listing.starting_bid }}">
+                        <button type="submit" style="background-color: rgb(202, 199, 199); color: black; width: 50px; border-radius: 10px">Bid</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        {% if listing.image_url != "" %}
+            <div class="row align-items-center text-center">
+                    <div  class="col align-items-center">
+                        <img src="{{ listing.image_url }}" alt="Image of {{ active_listing.title }}" width="200px" height="auto">
+                    </div>
+            </div>
+        {% endif %}
+        <hr class="my-4 mx-0" style="border: 1px solid black;margin-top: 20px">
+        <div class="container align-items-center" width="300px" height="auto">
+            <div class="row d-flex flex-wrap flex-shrink-0 justify-content-between">
+                <div class="col-auto d-flex flex-wrap">
+                    <small style="font-weight: bold;">Description:</small>
+                </div>
+                <div class="col-auto dflex flex-wrap text-center">
+                    {% if listing.category != "" %}
+                        <small style="font-weight: bold;">Category: {{ listing.category }}</small>
+                    {% endif %}
+                </div>
+                <p class="text-left">{{ listing.description }}</p>
+                <hr class="my-4 mx-0" style="border: 1px solid black;margin-top: 20px">
+            </div>
+            <div class="row d-flex flex-wrap flex-shrink-0 justify-content-between">
+                <div class="col-auto d-flex flex-wrap">
+                    <small style="font-weight: bold;">Comments:</small>
+                </div>
+            </div>
+            {% if listing.comments %}
+                {% for comment in listing.comments %}
+                    <div class="row d-flex flex-wrap flex-shrink-0 justify-content-start mb-1">
+                        <div class="col-12 d-flex">
+                            <div class="me-2">
+                                <small style="font-weight: bold">{{ comment.user }}</small>
+                            </div>
+                            <div class="flex-grow-1">
+                                <small style="font-size: smaller">{{ comment.comment }}</small>
+                            </div>
+                            {% if user == "Admin" %}
+                                <div>
+                                    <form action="{% url 'edit_comment' comment.comment listing.id comment.user %}" method="POST">
+                                        {% csrf_token %}
+                                        <button style="background-color: rgb(202, 199, 199); color: black;border-radius: 10px;height: 30px">Edit</button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <form action="{% url 'delete_listing' listing.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button style="background-color: maroon; color: white;border-radius: 10px;height: 30px">Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <br>
+            <div class="row justify-content-between" style="width: 100%">
+                <form action="{% url 'add_comment' listing.id %}" method="POST" style="width: 100%;">
+                    {% csrf_token %}
+                    <textarea id="new_comment" name="new_comment" placeholder="Write your comment here" style="width: 100%;border-radius: 15px;padding-left: 15px;height: 100px;margin-bottom: 10px"></textarea>
+                    <button style="font-weight: bold;border-radius: 15px;margin-bottom: 10px">Add Comment</button>
+                </form>
+            </div>
+            <hr class="my-4 mx-0" style="border: 1px solid black;">
+            {% if bids %}
+                {% for bid in bids %}
+                    <div class="row d-flex flex-wrap flex-shrink-0 justify-content-start mb-1">
+                        <div class="col-12 d-flex">
+                            <div class="me-2">
+                                <small style="font-weight: bold">{{ bid.bidding_user }}</small>
+                            </div>
+                            <div class="flex-grow-1">
+                                <small style="font-size: smaller">{{ bid.new_bid }}</small>
+                            </div>
+                            {% if user == "Admin" %}
+                                <div>
+                                    <form action="{% url 'edit_bid' bid.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button style="background-color: rgb(202, 199, 199); color: black;border-radius: 10px;height: 30px">Edit</button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <form action="{% url 'delete_bid' bid.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button style="background-color: maroon; color: white;border-radius: 10px;height: 30px">Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

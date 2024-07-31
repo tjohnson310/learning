@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,6 +14,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     starting_bid = models.DecimalField(decimal_places=2, max_digits=10)
+    current_bid = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     image_url = models.CharField(max_length=300)
     category = models.CharField(max_length=64)
     closed = models.BooleanField(default=False)

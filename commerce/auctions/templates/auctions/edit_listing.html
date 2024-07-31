@@ -22,10 +22,10 @@
             <div class="col-auto text-right">
                 <div class="mb-3" style="margin-right: 45px;">
                     <select name="category" id="category">
-                        <option value="fashion">Fashion</option>
-                        <option value="toys">Toys</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="home">Home</option>
+                        <option value="fashion" {% if selected_category == "Fashion" %}selected{% endif %}>Fashion</option>
+                        <option value="toys" {% if selected_category == "Toys" %}selected{% endif %}>Toys</option>
+                        <option value="electronics" {% if selected_category == "Electronics" %}selected{% endif %}>Electronics</option>
+                        <option value="home" {% if selected_category == "Home" %}selected{% endif %}>Home</option>
                     </select>
                 </div>
             </div>

@@ -18,15 +18,15 @@
         </div>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'create_new_listing' %}">Create New Listing</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'nav_to_categories' %}">Categories</a>
             </li>
             {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_new_listing' %}">Create New Listing</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'navigate_to_watchlist' %}">My Watchlist</a>
                 </li>

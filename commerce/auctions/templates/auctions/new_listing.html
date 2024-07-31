@@ -2,10 +2,11 @@
 
 {% block title %}Create New Listing{% endblock %}
 
+{% block page_name %}Create New Listing{% endblock %}
+
 {% block body %}
     <form action="{% url 'create_new_listing' %}" method="POST">
         {% csrf_token %}
-        {% block page_name %}Create New Listing{% endblock %}
         <div class="row align-items-center justify-content-between" style="margin-left: 45px">
             <div class="col-auto text-left">
                 <div class="mb-3">

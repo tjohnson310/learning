@@ -579,15 +579,21 @@ def submit_edits(request, listing_id):
         listing.category = request.POST.get("category").capitalize()
         listing.description = request.POST.get("new_listing")
         listing.starting_bid = request.POST.get("starting_bid")
+        listing.current_bid = request.POST.get("starting_bid")
         listing.image_url = request.POST.get("image_url")
         listing.save()
+
+        all_bids = Bid.objects.filter(listing=listing)
+
         return render(request, "auctions/listing_page.html", {
             "user": request.user.username,
             "listing": listing,
             "user_is_valid": user_is_valid,
             "remove": remove,
             "closed": listing.closed,
-            "winner": listing.winner
+            "winner": listing.winner,
+            "bids": all_bids,
+            "current_bid": request.POST.get("starting_bid")
         })
 
 
@@ -605,9 +611,13 @@ def submit_bid_edit(request, bid_id):
 
     user_is_valid = isinstance(request.user, User)
     listing = current_bid.listing
+    print(f"Current bid: {listing.current_bid}")
+    print(f"Listing title: {listing.title}")
     listing.starting_bid = request.POST.get("new_bid")
     listing.current_bid = request.POST.get("new_bid")
     listing.save()
+
+    all_bids = Bid.objects.filter(listing=listing)
 
     if user_is_valid:
         try:
@@ -630,7 +640,9 @@ def submit_bid_edit(request, bid_id):
             "user_is_valid": user_is_valid,
             "remove": remove,
             "closed": current_bid.listing.closed,
-            "winner": current_bid.listing.winner
+            "winner": current_bid.listing.winner,
+            "bids": all_bids,
+            "current_bid": current_bid
         })
 
 def delete_bid(request, bid_id):

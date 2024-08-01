@@ -191,10 +191,11 @@ def update_bid(request, listing_id):
                     bid = Bid.objects.filter(listing=listing, bidding_user=request.user).first()
                     bids = Bid.objects.filter(listing=listing)
                     if bid:
+                        print("bid exists")
                         bid.new_bid = new_bid
                         bid.save()
 
-                        listing.current_bid = current_bid
+                        listing.current_bid = new_bid
                         listing.save()
                     else:
                         print("Creating new bid.")
@@ -202,7 +203,7 @@ def update_bid(request, listing_id):
                                         listing=listing, new_bid=new_bid)
                         listing_bid.save()
 
-                        listing.current_bid = current_bid
+                        listing.current_bid = new_bid
                         listing.save()
 
                     print(f"Winner: {listing.winner}")
@@ -222,11 +223,11 @@ def update_bid(request, listing_id):
                     return HttpResponse('Your bid must be greater than the top bid!')
             else:
                 listing_bid = Bid(bidding_user=request.user, 
-                listing=listing, new_bid=new_bid)
-                listing.current_bid = current_bid
+                                  listing=listing, new_bid=new_bid)
                 listing_bid.save()
-                print(f"Winner: {listing.winner}")
-                print(f"User: {request.user.username}")
+
+                listing.current_bid = new_bid
+                listing.save()
                 return render(request, 'auctions/listing_page.html', {
                         "user": request.user.username,
                         "listing": listing,
@@ -606,16 +607,21 @@ def edit_bid(request, bid_id):
 
 def submit_bid_edit(request, bid_id):
     current_bid = Bid.objects.get(id=bid_id)
-    current_bid.new_bid = request.POST.get("new_bid")
-    current_bid.save()
-
-    user_is_valid = isinstance(request.user, User)
     listing = current_bid.listing
-    print(f"Current bid: {listing.current_bid}")
-    print(f"Listing title: {listing.title}")
-    listing.starting_bid = request.POST.get("new_bid")
-    listing.current_bid = request.POST.get("new_bid")
-    listing.save()
+    user_is_valid = isinstance(request.user, User)
+    if not listing.closed:
+        current_bid.new_bid = request.POST.get("new_bid")
+        current_bid.save()
+
+        master_bid = current_bid.new_bid
+
+        print(f"Current bid: {listing.current_bid}")
+        print(f"Listing title: {listing.title}")
+        listing.starting_bid = request.POST.get("new_bid")
+        listing.current_bid = request.POST.get("new_bid")
+        listing.save()
+    else:
+        return HttpResponse("Listing is closed! No further edits can be made at this time.")
 
     all_bids = Bid.objects.filter(listing=listing)
 
@@ -642,7 +648,7 @@ def submit_bid_edit(request, bid_id):
             "closed": current_bid.listing.closed,
             "winner": current_bid.listing.winner,
             "bids": all_bids,
-            "current_bid": current_bid
+            "current_bid": master_bid
         })
 
 def delete_bid(request, bid_id):
@@ -671,6 +677,8 @@ def delete_bid(request, bid_id):
 
     if current_bid is None:
         current_bid = listing.starting_bid
+        listing.current_bid = listing.starting_bid
+        listing.save()
 
     print(f"Winner: {listing.winner}")
     print(f"User: {request.user.username}")

@@ -45,7 +45,7 @@ function compose_email() {
 
 }
 
-function compose_reply(subject, recipients, timestamp){
+function compose_reply(subject, recipients, timestamp, body){
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -53,7 +53,7 @@ function compose_reply(subject, recipients, timestamp){
 
   document.querySelector("#compose-recipients").value = recipients;
   document.querySelector('#compose-subject').value = `RE: ${subject}`;
-  document.querySelector('#compose-body').value = `On ${timestamp} ${recipients} wrote: ${subject}`;
+  document.querySelector('#compose-body').value = `On ${timestamp} ${recipients} wrote: ${body}`;
 
   document.querySelector('#compose-form').onsubmit = function(event) {
     event.preventDefault();
@@ -141,7 +141,7 @@ function load_email(email_id, user_email, mailbox) {
                       </div>
                     </div>`
     document.querySelector('#emails-view').insertAdjacentHTML('beforeend', email_content);
-    document.querySelector(`#reply`).addEventListener("click", () => compose_reply(subject, sender, timestamp));
+    document.querySelector(`#reply`).addEventListener("click", () => compose_reply(subject, sender, timestamp, body));
 
     if (mailbox === "inbox" || mailbox === "archived"){
       console.log(mailbox);

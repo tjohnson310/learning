@@ -45,7 +45,7 @@ function compose_email() {
 
 }
 
-function compose_reply(subject, recipients){
+function compose_reply(subject, recipients, timestamp){
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -53,6 +53,7 @@ function compose_reply(subject, recipients){
 
   document.querySelector("#compose-recipients").value = recipients;
   document.querySelector('#compose-subject').value = `RE: ${subject}`;
+  document.querySelector('#compose-body').value = `On ${timestamp} ${recipients} wrote: ${subject}`;
 
   document.querySelector('#compose-form').onsubmit = function(event) {
     event.preventDefault();
@@ -78,13 +79,16 @@ function compose_reply(subject, recipients){
 }
 
 function archive_email(archive, emailId){
+  console.log(`Set archive equal to: ${archive}`)
   fetch(`/emails/${emailId}`, {
     method: 'PUT',
     body: JSON.stringify({
       archived: archive
     })
+  })
+  .then(() => {
+    load_mailbox('inbox'); 
   });
-  load_mailbox('archived'); 
 }
 
 function load_email(email_id, user_email, mailbox) {
@@ -137,26 +141,26 @@ function load_email(email_id, user_email, mailbox) {
                       </div>
                     </div>`
     document.querySelector('#emails-view').insertAdjacentHTML('beforeend', email_content);
-    document.querySelector(`#reply`).addEventListener("click", () => compose_reply(subject, sender));
+    document.querySelector(`#reply`).addEventListener("click", () => compose_reply(subject, sender, timestamp));
 
     if (mailbox === "inbox" || mailbox === "archived"){
       console.log(mailbox);
-      if (!email.archive){
+      if (!email.archived){
         console.log('Email is not archived.');
         archive_HTML = `<hr>
                         <div class="row">
-                          <button data-user-email="${user_email}" data-email-id="email_${email_id}" class="btn btn-sm btn-outline-primary" id="archive">Unarchive</div>
+                          <button data-user-email="${user_email}" data-email-id="email_${email_id}" class="btn btn-sm btn-outline-primary" id="archive">Archive</div>
                         </div>`
         document.querySelector('#emails-view').insertAdjacentHTML('beforeend', archive_HTML);
-        document.querySelector(`#archive`).addEventListener("click", () => archive_email(false, email_id));
+        document.querySelector(`#archive`).addEventListener("click", () => archive_email(true, email_id));
       } else {
         console.log('Email is archived.');
         unarchive_HTML = `<hr>
                         <div class="row">
-                          <button data-user-email="${user_email}" data-email-id="email_${email_id}" class="btn btn-sm btn-outline-primary" id="archive">Archive</div>
+                          <button data-user-email="${user_email}" data-email-id="email_${email_id}" class="btn btn-sm btn-outline-primary" id="archive">Unarchive</div>
                         </div>`
         document.querySelector('#emails-view').insertAdjacentHTML('beforeend', unarchive_HTML);
-        document.querySelector(`#archive`).addEventListener("click", () => archive_email(true, email_id));
+        document.querySelector(`#archive`).addEventListener("click", () => archive_email(false, email_id));
       }
     }
 
@@ -177,6 +181,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
+  console.log(`Mailbox: ${mailbox}`)
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
@@ -196,16 +201,19 @@ function load_mailbox(mailbox) {
                             </div>
                           </div>`;
       document.querySelector('#emails-view').insertAdjacentHTML('beforeend', emailHTML);
-      let userEmail;
+      
       const current_button = document.querySelector(`#${mailbox}`);
+      let userEmail;
       if (current_button !== null){
         console.log("Current button is not null");
         userEmail = current_button.getAttribute('data-user-email');
       } else {
         console.log("Current button is null");
-        const current_button = document.querySelector(`#archived`);
-        userEmail = current_button.getAttribute('data-user-email');
-        mailbox = "archived";
+        const archived_button = document.querySelector(`#archived`);
+        if (archived_button){
+          userEmail = archived_button.getAttribute('data-user-email');
+          mailbox = "archived";
+        }
       }
       document.querySelector(`#email_${emails[i].id}`).addEventListener("click", () => load_email(`${emails[i].id}`, userEmail, mailbox));
     }
